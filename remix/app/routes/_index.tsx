@@ -1,5 +1,6 @@
 import type { MetaFunction } from "@remix-run/node";
 import { Link } from "@remix-run/react";
+import NavBar from "../components/NavBar";
 
 export const meta: MetaFunction = () => {
   return [
@@ -11,6 +12,7 @@ export const meta: MetaFunction = () => {
 export default function Index() {
   return (
     <main className="h-screen bg-purple-500 p-6">
+      <NavBar />
       <div className="flex-col justify-center items-center text-center">
         <h1 className="font-bold text-4xl pb-3">A better way of keeping track of your Notes </h1>
         <p>Try our early beta and never loose track of your notes again!</p>
