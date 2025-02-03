@@ -1,5 +1,14 @@
-import { Link, useLoaderData } from "@remix-run/react";
+import { Link, redirect, useLoaderData } from "@remix-run/react";
 import FormPage from "../components/FormPage";
+
+
+export const action = async ({ request }: { request: Request }) => {
+  const formData = await request.formData();
+  const title = formData.get("title");
+  const body = formData.get("body");
+  console.log({ title, body });
+  return redirect("/notes");
+};
 
 export const loader = async () => {
   interface note {
