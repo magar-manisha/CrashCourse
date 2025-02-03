@@ -1,4 +1,4 @@
-import { Form, redirect } from "@remix-run/react";
+import { Form, redirect, useNavigation } from "@remix-run/react";
 
 export const action = async ({ request }: { request: Request }) => {
   const formData = await request.formData();
@@ -9,6 +9,8 @@ export const action = async ({ request }: { request: Request }) => {
 };
 
 const FormPage = () => {
+  const navigation = useNavigation();
+  const isSubmitting = !(navigation.state === "idle");
     return (
         <div className=" bg-white p-6 flex text-center rounded-xl">
           <Form method="POST">
@@ -25,7 +27,7 @@ const FormPage = () => {
             </label>
             
             <br/><button type="submit" className="bg-yellow-500 py-2 px-4 rounded-xl mt-3">
-                 Add Notes!
+                 {isSubmitting? "Submitting!": "Add Notes!"}
             </button>
           </Form>
         </div>
