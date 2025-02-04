@@ -32,7 +32,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body>
-      <main className="p-6 bg-purple-500 h-full">
+      <main className="p-6 bg-gradient-to-br from-blue-500 to-purple-600 text-white">
          {children}
       </main>
        

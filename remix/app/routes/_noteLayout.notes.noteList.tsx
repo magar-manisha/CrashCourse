@@ -21,7 +21,7 @@ const NoteLayout = () => {
 
   return (
     <div>
-      <div className="mt-5 bg-purple-500 h-screen">
+      <div className="mt-5 min-h-screen">
         <ul className="grid grid-cols-4 gap-4 w-full h-50% text-black">
           {notes.map((item) => (
             <li key={item.id} className="bg-white border-2 rounded-lg p-5 m-5">

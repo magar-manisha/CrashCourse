@@ -20,8 +20,8 @@ const NoteId = () => {
     const {noteId} = useParams();
     const {notes} = useLoaderData<typeof loader>();
   return (
-   <div className="h-screen bg-purple-500 place-items-center" >
-    <div className=" text-center w-1/2">
+   <div className="flex min-h-screen justify-center" >
+    <div className="text-center w-1/2">
       <h1 className="text-2xl">NoteId= {noteId}</h1>
         <div className="list-none">
           {notes.filter(item => item.id == noteId).map((item) => (<li key={item.id}> {item.body}</li>))}
