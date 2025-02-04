@@ -1,13 +1,21 @@
 import { Form, redirect, useNavigation, useRouteError, isRouteErrorResponse } from "@remix-run/react";
-// import FormPage from "../components/FormPage";
+import { db } from "~/utils/db.server";
 
 
 export const action = async ({ request }: { request: Request }) => {
   const formData = await request.formData();
-  const title = formData.get("title");
-  const body = formData.get("body");
+  const title = formData.get("title") as string | null;
+  const body = formData.get("body") as string | null;
+
+
+  if (!title || !body) {
+    return new Response('Title and body are required', { status: 400 });
+  }
+
+  const note = await db.note.create({data: {title, body}})
+  
   console.log({ title, body });
-  return redirect("/notes/noteList");
+  return redirect(`/notes/${note.id}`);
 };
 
 

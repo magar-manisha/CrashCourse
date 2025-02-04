@@ -3,6 +3,9 @@ import { PrismaClient } from '@prisma/client';
 const db = new PrismaClient();
 
 async function seed() {
+    
+    await db.note.deleteMany();
+
   await Promise.all(
     getNotes().map(note => {
       return db.note.create({ data: note });
