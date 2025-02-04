@@ -4,14 +4,14 @@ import NavBar from "../components/NavBar";
 
 export const meta: MetaFunction = () => {
   return [
-    { title: "New Remix App" },
-    { name: "description", content: "Welcome to Remix!" },
+    { title: "My Notes" },
+    { name: "description", content: "Welcome to My Note!" },
   ];
 };
 
 export default function Index() {
   return (
-    <main className="h-screen bg-purple-500 p-6">
+    <main className="min-h-screen  p-6">
       <NavBar />
       <div className="flex-col justify-center items-center text-center">
         <h1 className="font-bold text-4xl pb-3">A better way of keeping track of your Notes </h1>

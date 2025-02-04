@@ -1,35 +1,63 @@
-import { useLoaderData, useParams } from "@remix-run/react"
+import { Form, redirect, useLoaderData } from "@remix-run/react";
+import { db } from "~/utils/db.server";
 
-export const loader = async() =>{
-
+export const loader = async ({ params }: { params: { noteId: string } }) => {
   interface note {
-    "postId": string;
-    "id": string;
-    "name": string;
-    "email": string;
-    "body": string;
+    id: string;
+    title: string;
+    body: string;
   }
 
+  const note = await db.note.findUnique({
+    where: { id: params.noteId },
+  });
 
-  const response = await fetch("https://jsonplaceholder.typicode.com/comments");
-  const data : note[] = await response.json();
-  return {notes: data};
+  if (!note) {
+    throw new Error("No such note");
+  }
+  const data = { note };
+  return data;
+};
+
+
+export const action = async({ params }: { params: { noteId: string } }) =>{
+  const { noteId } = params;
+
+  if (!noteId) {
+    throw new Error("No noteId provided");
+  }
+
+  await db.note.delete({
+    where: {
+      id: noteId,
+    },
+  });
+
+  return redirect("/notes/noteList")
+
 }
 
 const NoteId = () => {
-    const {noteId} = useParams();
-    const {notes} = useLoaderData<typeof loader>();
+  const { note } = useLoaderData<{
+    note: { id: string; title: string; body: string };
+  }>();
   return (
-   <div className="h-screen bg-purple-500 place-items-center" >
-    <div className=" text-center w-1/2">
-      <h1 className="text-2xl">NoteId= {noteId}</h1>
-        <div className="list-none">
-          {notes.filter(item => item.id == noteId).map((item) => (<li key={item.id}> {item.body}</li>))}
+    <div className="flex min-h-screen justify-center mt-9">
+      <div>
+        <div className="text-center">
+          <p>{note.body}</p>
         </div>
-    </div>
-        
-    </div>
-  )
-}
 
-export default NoteId
+        <footer>
+          <Form method="POST">
+            <button className="btn btn-delete bg-red-900 py-2 px-4 rounded-xl mt-44">
+              Delete
+            </button>
+          </Form>
+        </footer>
+      </div>
+    </div>
+  );
+};
+
+export default NoteId;

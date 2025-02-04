@@ -1,19 +1,21 @@
 import { Link, useLoaderData } from "@remix-run/react";
+import { db } from '~/utils/db.server'
 
 export const loader = async () => {
-  interface note {
-    postId: string;
+  interface Note {
     id: string;
-    name: string;
-    email: string;
+    title: string;
     body: string;
+    createdAt: Date;
   }
 
-  const response = await fetch(
-    "https://jsonplaceholder.typicode.com/comments?_limit=4"
-  );
-  const data: note[] = await response.json();
-  return { notes: data };
+  const notes: Note[] = await db.note.findMany({
+    take: 20,
+    select: { id: true, title: true, body: true, createdAt: true },
+    orderBy: { createdAt: 'desc' },
+  });
+
+  return { notes };
 };
 
 const NoteLayout = () => {
@@ -21,14 +23,20 @@ const NoteLayout = () => {
 
   return (
     <div>
-      <div className="mt-5 bg-purple-500 h-screen">
-        <ul className="grid grid-cols-4 gap-4 w-full h-50% text-black">
-          {notes.map((item) => (
-            <li key={item.id} className="bg-white border-2 rounded-lg p-5 m-5">
-              <Link to={`/notes/${item.id}`}>New Notes - {item.id}</Link>
-            </li>
-          ))}{" "}
-        </ul>
+      <div className="mt-9 min-h-screen flex justify-center">
+        <div className="w-1/3">
+            <button className="bg-yellow-500 p-3 rounded-xl w-full">Notes</button>
+            <ul className=" text-black text-center">
+                {notes.map((item) => (
+                    <div key={item.id} className="bg-white border-2 rounded-lg p-5 mt-5 ">
+                      <Link to={`/notes/${item.id}`}>
+                      <p>{item.title}</p>
+                      <p>{new Date(item.createdAt).toLocaleString()}</p>
+                    </Link>
+                    </div>
+                  ))}{" "}
+              </ul>
+        </div>
       </div>
     </div>
   );
